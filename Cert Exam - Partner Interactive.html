@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FME Sales Professional Certification — Interactive Exam</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {
+    --orange: #F55215;
+    --green:  #14F550;
+    --blue:   #00D7FF;
+    --black:  #000000;
+    --white:  #F4F3ED;
+    --tonal-orange: #A95828;
+    --tonal-blue:   #002CFA;
+    --card:   #ffffff;
+    --border: #e2e1dc;
+    --muted:  #555550;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--white);
+    color: var(--black);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--black);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--orange);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-logo { display: flex; align-items: center; gap: 12px; }
+  .dot-o { width: 10px; height: 10px; background: var(--orange); border-radius: 50%; }
+  .dot-b { width: 10px; height: 10px; background: var(--blue); border-radius: 50%; }
+  .header-title { color: var(--white); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; }
+  .header-badge { background: var(--orange); color: var(--black); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 2px; }
+
+  /* ── SCREENS ── */
+  .screen { display: none; flex: 1; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ── LANDING ── */
+  #screen-landing {
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+  }
+  .landing-card {
+    background: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 52px 48px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+  }
+  .landing-eyebrow { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--orange); margin-bottom: 12px; }
+  .landing-card h1 { font-size: 2rem; font-weight: 800; line-height: 1.15; margin-bottom: 12px; }
+  .landing-card p { color: var(--muted); font-size: 0.93rem; line-height: 1.7; margin-bottom: 32px; }
+  .landing-meta { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; }
+  .meta-pill { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 8px 16px; font-size: 0.8rem; }
+  .meta-pill strong { display: block; font-weight: 700; color: var(--black); }
+  .meta-pill span { color: var(--muted); font-size: 0.73rem; }
+  .track-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-track {
+    padding: 16px 32px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: 0.02em;
+  }
+  .btn-track:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-employee { background: var(--orange); color: var(--black); }
+  .btn-partner  { background: var(--tonal-blue); color: var(--white); }
+  .track-note { margin-top: 20px; font-size: 0.78rem; color: var(--muted); }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    background: var(--black);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .progress-bar-track {
+    flex: 1;
+    height: 5px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  .progress-label { color: rgba(244,243,237,0.7); font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+
+  /* ── EXAM ── */
+  #screen-exam { background: var(--white); }
+  .exam-body { flex: 1; max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; width: 100%; }
+  .q-module { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--orange); margin-bottom: 8px; }
+  .q-number-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 16px; }
+  .q-text {
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.55;
+    margin-bottom: 28px;
+    color: var(--black);
+  }
+  .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    transition: border-color 0.15s, background 0.15s;
+    width: 100%;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--orange); background: #fffaf8; }
+  .option-btn .opt-letter {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .option-btn.selected { border-color: var(--orange); background: #fff6f3; }
+  .option-btn.selected .opt-letter { background: var(--orange); border-color: var(--orange); color: var(--black); }
+  .option-btn.correct  { border-color: #14a03a; background: #f0fbf4; }
+  .option-btn.correct .opt-letter  { background: #14a03a; border-color: #14a03a; color: #fff; }
+  .option-btn.wrong    { border-color: #d63214; background: #fff4f2; }
+  .option-btn.wrong .opt-letter    { background: #d63214; border-color: #d63214; color: #fff; }
+  .option-btn:disabled { cursor: default; }
+  .rationale-box {
+    background: #f8f7f3;
+    border-left: 4px solid var(--orange);
+    border-radius: 0 4px 4px 0;
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: none;
+  }
+  .rationale-box strong { color: var(--black); }
+  .exam-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+  }
+  .btn-next {
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    border-radius: 4px;
+    padding: 13px 36px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    font-family: inherit;
+  }
+  .btn-next:disabled { opacity: 0.35; cursor: default; }
+  .btn-next:not(:disabled):hover { opacity: 0.85; }
+  .section-break {
+    background: var(--black);
+    color: var(--white);
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    border-left: 5px solid var(--orange);
+  }
+  .section-break h3 { font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+  .section-break p { font-size: 0.85rem; color: rgba(244,243,237,0.65); }
+
+  /* ── RESULTS ── */
+  #screen-results {
+    align-items: center;
+    justify-content: flex-start;
+    padding: 48px 20px 80px;
+  }
+  .results-card {
+    background: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 48px;
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .result-eyebrow { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--orange); margin-bottom: 10px; }
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+  }
+  .result-badge.pass { background: #e8fbed; color: #0d7a2e; border: 1.5px solid #14a03a; }
+  .result-badge.fail { background: #fdecea; color: #a0170d; border: 1.5px solid #d63214; }
+  .result-score { font-size: 3.2rem; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .result-score span { font-size: 1.4rem; font-weight: 400; color: var(--muted); }
+  .result-pct { font-size: 1rem; color: var(--muted); margin-bottom: 32px; }
+  .result-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+  .module-breakdown { margin-bottom: 28px; }
+  .module-breakdown h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
+  .module-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .module-row:last-child { border-bottom: none; }
+  .module-row-name { color: var(--black); }
+  .module-row-score { font-weight: 700; }
+  .module-row-score.perfect { color: #0d7a2e; }
+  .module-row-score.partial { color: var(--tonal-orange); }
+  .module-row-score.zero    { color: #d63214; }
+  .result-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+  .btn-review {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 28px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  .btn-review:hover { opacity: 0.8; }
+  .btn-retake {
+    background: transparent;
+    color: var(--black);
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 28px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .btn-retake:hover { border-color: var(--orange); }
+
+  /* ── REVIEW ── */
+  #screen-review { background: var(--white); padding-bottom: 80px; }
+  .review-header {
+    background: var(--black);
+    color: var(--white);
+    padding: 28px 40px;
+    border-bottom: 3px solid var(--orange);
+  }
+  .review-header h2 { font-size: 1.1rem; font-weight: 800; }
+  .review-header p  { font-size: 0.83rem; color: rgba(244,243,237,0.6); margin-top: 4px; }
+  .review-body { max-width: 760px; margin: 0 auto; padding: 36px 24px; }
+  .review-item {
+    background: var(--card);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .review-item.correct-item { border-color: #14a03a; }
+  .review-item.wrong-item   { border-color: #d63214; }
+  .review-q-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .review-q-label.correct-label { color: #0d7a2e; }
+  .review-q-label.wrong-label   { color: #d63214; }
+  .review-q-text { font-size: 0.95rem; font-weight: 600; line-height: 1.5; margin-bottom: 16px; }
+  .review-answers { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .review-opt {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    border: 1.5px solid transparent;
+  }
+  .review-opt.was-selected-wrong { background: #fff4f2; border-color: #d63214; }
+  .review-opt.is-correct { background: #f0fbf4; border-color: #14a03a; }
+  .review-opt .r-letter { font-weight: 700; min-width: 18px; }
+  .review-rationale { font-size: 0.84rem; color: var(--muted); line-height: 1.65; border-top: 1px solid var(--border); padding-top: 14px; }
+  .btn-back-results {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 28px;
+    transition: opacity 0.15s;
+  }
+  .btn-back-results:hover { opacity: 0.85; }
+
+  /* ── FEEDBACK WIDGET ── */
+  .feedback-widget { position: fixed; bottom: 24px; right: 24px; z-index: 200; display: none; }
+  .feedback-widget.visible { display: block; }
+  .feedback-panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; width: 300px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    margin-bottom: 10px; display: none;
+  }
+  .feedback-panel.open { display: block; }
+  .feedback-panel-title { font-size: 0.78rem; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .feedback-panel-hint { font-size: 0.76rem; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+  .feedback-textarea {
+    width: 100%; min-height: 80px; border: 1px solid var(--border); border-radius: 4px;
+    padding: 8px 10px; font-family: inherit; font-size: 0.82rem; resize: vertical;
+    margin-bottom: 10px; color: var(--black);
+  }
+  .feedback-textarea:focus { outline: none; border-color: var(--orange); }
+  .feedback-actions { display: flex; gap: 8px; }
+  .btn-save-note {
+    background: var(--orange); color: var(--black); border: none; border-radius: 4px;
+    padding: 8px 16px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+    font-family: inherit; flex: 1;
+  }
+  .btn-cancel-note {
+    background: transparent; color: var(--muted); border: 1px solid var(--border);
+    border-radius: 4px; padding: 8px 12px; font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .feedback-toggle {
+    background: var(--black); color: var(--white); border: none; border-radius: 24px;
+    padding: 10px 18px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    font-family: inherit; display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.15s;
+  }
+  .feedback-toggle:hover { background: #222; }
+  .note-dot { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; display: none; }
+  .note-dot.has-note { display: block; }
+  /* Notes on results */
+  .notes-section { margin-top: 4px; }
+  .notes-section h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
+  .note-item { background: #fffbf5; border: 1px solid #f5d6b8; border-left: 3px solid var(--orange); border-radius: 4px; padding: 10px 14px; margin-bottom: 8px; }
+  .note-q { font-weight: 700; color: var(--orange); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .note-text { font-size: 0.85rem; color: var(--black); line-height: 1.5; }
+  .no-notes { color: var(--muted); font-size: 0.85rem; font-style: italic; }
+  .final-feedback-area {
+    width: 100%; min-height: 70px; border: 1px solid var(--border); border-radius: 4px;
+    padding: 10px 12px; font-family: inherit; font-size: 0.85rem; resize: vertical;
+    margin-bottom: 12px; color: var(--black);
+  }
+  .final-feedback-area:focus { outline: none; border-color: var(--orange); }
+  .btn-copy-feedback {
+    background: var(--black); color: var(--white); border: none; border-radius: 4px;
+    padding: 10px 20px; font-size: 0.82rem; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: opacity 0.15s;
+  }
+  .btn-copy-feedback:hover { opacity: 0.8; }
+  .copy-confirm { margin-left: 12px; font-size: 0.78rem; color: #0d7a2e; display: none; }
+  .btn-submit {
+    background: var(--orange); color: var(--black); border: none; border-radius: 4px;
+    padding: 13px 28px; font-size: 0.92rem; font-weight: 700; cursor: pointer;
+    font-family: inherit; width: 100%; transition: opacity 0.15s;
+  }
+  .btn-submit:hover:not(:disabled) { opacity: 0.85; }
+  .btn-submit:disabled { opacity: 0.6; cursor: default; }
+  .submit-hint { font-size: 0.76rem; color: var(--muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="header-logo">
+    <div class="dot-o"></div>
+    <div class="dot-b"></div>
+    <span class="header-title">FME Sales Professional Certification</span>
+  </div>
+  <div class="header-badge">Interactive Exam</div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- SCREEN 1: LANDING / TRACK SELECT  -->
+<!-- ══════════════════════════════════ -->
+<div id="screen-landing" class="screen active">
+  <div class="landing-card">
+    <div class="landing-eyebrow">Sales Enablement Program</div>
+    <h1>FME Sales Professional<br>Certification</h1>
+    <p>For Safe Software employees and reselling partners. Answer the 54 shared questions, then complete your role-specific track. Choose your track below to begin.</p>
+    <div class="landing-meta">
+      <div class="meta-pill"><strong>60</strong><span>Questions</span></div>
+      <div class="meta-pill"><strong>48 / 60</strong><span>To Pass (80%)</span></div>
+      <div class="meta-pill"><strong>~45 min</strong><span>Estimated time</span></div>
+    </div>
+    <div class="track-buttons">
+      <button class="btn-track btn-employee" onclick="goToRegister('employee')">🟠 &nbsp;I am a Safe Software Employee</button>
+      <button class="btn-track btn-partner"  onclick="goToRegister('partner')">🔵 &nbsp;I am a Safe Software Partner</button>
+    </div>
+    <p class="track-note">Both tracks share Q1–Q54 · Your role-specific questions are Q55–60</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- SCREEN 1B: REGISTER               -->
+<!-- ══════════════════════════════════ -->
+<div id="screen-register" class="screen">
+  <div class="landing-card">
+    <div class="landing-eyebrow">Before You Begin</div>
+    <h1 style="font-size:1.8rem;margin-bottom:8px;">Your Details</h1>
+    <p style="margin-bottom:24px;color:var(--muted);">So we know who completed the exam, please enter your name and work email before starting.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:8px;">
+      <input id="reg-name" type="text" placeholder="Full name" style="padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit;background:var(--surface);color:var(--text);outline:none;" />
+      <input id="reg-email" type="email" placeholder="Work email address" style="padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit;background:var(--surface);color:var(--text);outline:none;" />
+    </div>
+    <div id="reg-error" style="color:#d63214;font-size:0.85rem;margin-bottom:16px;display:none;">Please enter your full name and a valid email address.</div>
+    <button class="btn-track btn-partner" style="width:100%;justify-content:center;" onclick="beginExam()">Start Exam →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- SCREEN 2: EXAM                    -->
+<!-- ══════════════════════════════════ -->
+<div id="screen-exam" class="screen">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="progress-label">Question 1 of 60</div>
+  </div>
+  <div class="exam-body">
+    <div id="section-break-container"></div>
+    <div class="q-module" id="q-module"></div>
+    <div class="q-number-label" id="q-number-label"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options-container"></div>
+    <div class="rationale-box" id="rationale-box"></div>
+    <div class="exam-footer">
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK WIDGET (visible during exam) -->
+<div class="feedback-widget" id="feedback-widget">
+  <div class="feedback-panel" id="feedback-panel">
+    <div class="feedback-panel-title" id="feedback-panel-title">Leave a Note</div>
+    <div class="feedback-panel-hint">Flag anything confusing, unclear, or that you've never been trained on. Your notes are collected at the end.</div>
+    <textarea class="feedback-textarea" id="feedback-textarea" placeholder="e.g. 'Never covered in training' · 'Unclear wording' · 'Too advanced for a new hire'..."></textarea>
+    <div class="feedback-actions">
+      <button class="btn-save-note" onclick="saveNote()">Save Note</button>
+      <button class="btn-cancel-note" onclick="closeFeedback()">Cancel</button>
+    </div>
+  </div>
+  <button class="feedback-toggle" onclick="toggleFeedback()">
+    <span>💬 Leave a note</span>
+    <span class="note-dot" id="note-dot"></span>
+  </button>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- SCREEN 3: RESULTS                 -->
+<!-- ══════════════════════════════════ -->
+<div id="screen-results" class="screen">
+  <div class="results-card">
+    <div class="result-eyebrow">Certification Result</div>
+    <div class="result-badge" id="result-badge"></div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-pct"  id="result-pct"></div>
+    <hr class="result-divider">
+    <div class="module-breakdown">
+      <h4>Score by section</h4>
+      <div id="module-breakdown-rows"></div>
+    </div>
+    <hr class="result-divider">
+    <div style="margin-bottom:20px;">
+      <button class="btn-submit" id="btn-submit" onclick="submitResults()">📊 Submit Results</button>
+      <div class="submit-hint">Your score, module breakdown, time taken, and any notes will be recorded anonymously.</div>
+    </div>
+    <div class="result-actions">
+      <button class="btn-review" onclick="showReview()">Review Answers</button>
+      <button class="btn-retake" onclick="retake()">← Start Over</button>
+    </div>
+    <hr class="result-divider">
+    <div class="notes-section">
+      <h4>Your Notes</h4>
+      <div id="notes-list"></div>
+      <div style="margin-top:18px;">
+        <h4 style="margin-bottom:6px;">Overall Feedback</h4>
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px;line-height:1.5;">Anything about the exam overall — difficulty, gaps in training, questions that felt unfair or unclear?</p>
+        <textarea class="final-feedback-area" id="final-feedback" placeholder="Overall thoughts on the exam..."></textarea>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="btn-copy-feedback" onclick="copyAllFeedback()">📋 Copy All Feedback</button>
+          <span class="copy-confirm" id="copy-confirm">✓ Copied to clipboard</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- SCREEN 4: REVIEW                  -->
+<!-- ══════════════════════════════════ -->
+<div id="screen-review" class="screen">
+  <div class="review-header">
+    <h2>Answer Review</h2>
+    <p id="review-subtitle"></p>
+  </div>
+  <div class="review-body">
+    <button class="btn-back-results" onclick="showResults()">← Back to Results</button>
+    <div id="review-items"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// QUESTION DATA
+// ═══════════════════════════════════════════════════════
+
+const SHARED = [
+  // MODULE 1
+  { n:1,  module:"Module 1 — The FME Platform",
+    q:"A prospect asks you to explain what FME does in under 30 seconds. Which response best captures the platform's value?",
+    opts:["FME is a GIS-focused platform primarily used by government agencies to ingest, transform, and publish spatial data — with some support for non-spatial formats when needed.","FME is an enterprise ETL and database migration platform — it connects data sources, transforms records, and automates pipelines across on-premises and cloud systems.","FME is a no-code data integration platform that connects, transforms, and automates data workflows between virtually any system.","FME is a data analytics and visualization platform that helps teams build maps, dashboards, and spatial reports by connecting to live data sources."],
+    ans:2, rationale:"FME's value is platform-agnostic data integration and automation. It works across industries and should never be introduced as a niche or single-sector tool." },
+
+  { n:2,  module:"Module 1 — The FME Platform",
+    q:"A prospect who already uses FME Form asks why they'd need FME Flow. What's the most compelling response?",
+    opts:["FME Flow lets you automate and schedule your Form workspaces and deploy them as apps to non-technical users — so your Form investment scales across the whole organization without adding more FME expertise.","Lead with the automation story — FME Flow lets them run workspaces on a schedule without keeping a desktop machine running, which removes the biggest operational friction for teams currently triggering Form jobs manually.","Position Flow as the natural next step once their Form usage grows — centralized workspace management and the ability to share automations across teams makes more sense at scale, but isn't typically the priority for smaller or newer deployments.","Frame it around their cloud or integration roadmap — Flow is most compelling for organizations planning to expose FME as a web service or connect it with cloud infrastructure, so it's worth qualifying whether they have those plans before building the case."],
+    ans:0, rationale:"Form and Flow are designed as two halves of one platform. A customer running Form-only is getting half the value. Never position Flow as optional." },
+
+  { n:3,  module:"Module 1 — The FME Platform",
+    q:"A small municipality with limited IT staff wants FME Flow but is concerned about managing server infrastructure. What do you recommend?",
+    opts:["Suggest they hire a dedicated system administrator before proceeding with Flow.","Tell them FME Flow isn't the right fit yet and focus on selling Form first.","Recommend they use a third-party cloud provider to self-host FME Flow.","Introduce them to FME Flow Hosted — Safe Software's managed offering on AWS — which removes the need for the customer to manage any server infrastructure."],
+    ans:3, rationale:"FME Flow Hosted is specifically designed for smaller organizations with limited IT resources. Safe hosts the infrastructure on AWS — the customer manages their own instance but does not need to provision or maintain any server infrastructure." },
+
+  { n:4,  module:"Module 1 — The FME Platform",
+    q:"An enterprise customer wants multiple team members to share FME Form access without each needing a dedicated machine. What do you explain?",
+    opts:["FME Form is single-user — only one person can be licensed at a time.","FME Form supports floating licenses that can be pooled and shared across a team, without each user needing a dedicated machine license.","Multi-user access requires FME Flow — Form itself only supports individual licensing.","Each user must have their own fixed license locked to their specific machine."],
+    ans:1, rationale:"Floating licenses are pooled across a team. Fixed licenses are locked to a specific machine. This distinction comes up in almost every Form deal." },
+
+  { n:5,  module:"Module 1 — The FME Platform",
+    q:"A utilities company wants non-technical field workers to submit and request data using FME workflows — without any FME training. What capability do you highlight?",
+    opts:["FME Flow can deploy workspaces as browser-based web apps, so field workers interact with a simple form or portal with FME running entirely behind the scenes.","FME Form's drag-and-drop interface is intuitive enough for non-technical users to learn quickly — Safe Software's FME Academy provides structured courses most field workers can complete within a few days.","Safe Software provides a dedicated mobile companion app built for non-technical field staff to submit data requests and trigger workflows on the go, without interacting with FME Form directly.","Integrating FME with a third-party low-code tool — such as Microsoft Power Apps — is the recommended approach, keeping FME focused on backend processing while giving field workers a familiar interface upfront."],
+    ans:0, rationale:"This is one of Flow's strongest value propositions: deploying powerful data workflows as user-facing apps for audiences who don't know FME exists." },
+
+  { n:6,  module:"Module 1 — The FME Platform",
+    q:"A prospect asks whether FME can connect to the systems they already use — they're running Salesforce, Snowflake, and ArcGIS. What's the most confident and accurate response?",
+    opts:["FME connects to Salesforce and Snowflake natively, but ArcGIS integration requires a separate Esri connector that needs to be verified against your specific license configuration.","FME supports those platforms through third-party connectors — you'd want to verify each one is included before making a commitment to the prospect.","Yes to all three — and that's actually a very common combination in FME environments. FME connects to over 500 systems and formats, including CRM platforms, data warehouses, and GIS tools, so it's rare to find something it can't work with.","FME can connect to Salesforce and ArcGIS directly, but Snowflake typically requires a custom configuration — worth looping in a technical resource before confirming to the prospect."],
+    ans:2, rationale:"FME's 500+ connector library includes Salesforce, Snowflake, ArcGIS, and the vast majority of systems a prospect is likely running. Confidence on connectivity is foundational — hesitation here undermines credibility before the conversation gets started." },
+
+  { n:7,  module:"Module 1 — The FME Platform",
+    q:"A new partner asks how to position FME Form and FME Flow to a prospect who has never heard of FME. What is the standard approach?",
+    opts:["Lead with Form as the lower-cost entry point — it has a shorter learning curve and a more accessible price, and you can introduce Flow later once the customer has seen value from Form and is ready to expand.","Position them as separate products with different buyer profiles — Form is a conversation for GIS analysts and data engineers, while Flow is a discussion for IT directors and operations teams managing server infrastructure.","Lead with Flow as the primary product — it delivers the most visible organizational value through automation and web apps, and Form can be introduced afterward as the authoring tool for teams who want to build their own workflows.","Position them as a unified platform — Form for building and authoring workflows, Flow for automating and deploying them at scale. Lead with both as one complete solution."],
+    ans:3, rationale:"The standard positioning is Form + Flow as one cohesive platform. Form-only can be accommodated if a customer pushes back — but it should never be the opening position." },
+
+  // MODULE 2
+  { n:8,  module:"Module 2 — Know Your Customer & Messaging",
+    q:"A prospect tells you their organization delivers an essential service to hundreds of thousands of end customers across a wide geographic territory. Their infrastructure is monitored through real-time sensors, but operational data is split across four completely separate systems — one for outages, one for work orders, one for asset records, and one for field operations — and none of them communicate. Which industry are they from?",
+    opts:["Government — public infrastructure agencies frequently deal with multi-system environments and real-time response requirements, but their primary mandate is civic services and policy delivery rather than essential commodity distribution to end customers.","Transportation — managing distributed assets and real-time monitoring across a wide geographic area is central to this vertical, but transportation organizations move people and goods rather than deliver a commodity service directly to residential and business customers.","Telecommunications — wide-area network asset management with real-time monitoring and siloed operational systems is a defining challenge, but telco organizations manage communication networks rather than physical commodity delivery infrastructure.","Utilities — the combination of commodity delivery to a defined customer base, distributed sensor monitoring, and operationally siloed systems for field teams, work scheduling, and asset management maps directly to how utilities manage their infrastructure. This fragmentation across distinct operational systems is the core FME use case in this vertical."],
+    ans:3, rationale:"Utilities is unambiguous here — delivering an essential commodity service across a wide territory, with real-time sensor data and siloed operational systems across outage, work order, asset, and field functions, is the textbook Utilities data challenge. The key clue is the combination of service territory delivery and operationally disconnected systems." },
+
+  { n:9,  module:"Module 2 — Know Your Customer & Messaging",
+    q:"According to Safe Software's ideal customer profile, who should you typically target first within a prospect organization?",
+    opts:["C-suite executives only, since all strategic purchasing decisions flow through them.","Finance and procurement managers, who ultimately control budget approvals.","GIS professionals, Data Engineers, IT Directors, and Project Managers who work with spatial and enterprise data.","Marketing and communications teams who use mapping for campaigns and reporting."],
+    ans:2, rationale:"ICP focus is on the people who have the data pain. Budget conversations come later — lead with the people who feel the problem." },
+
+  { n:10, module:"Module 2 — Know Your Customer & Messaging",
+    q:"A prospect works for a design and engineering firm where project files get handed off between multiple disciplines throughout the build cycle. Their biggest complaint is that by the time a file reaches the next team, it's already in the wrong format for the tools they use — and no one can agree on which version of the design is actually current. Version control has become a full-time job. Which industry are they from?",
+    opts:["Government — large public infrastructure projects involve multiple agencies and approval workflows, creating inter-agency coordination challenges and handoff delays across departments.","Utilities — engineering and field operations handoffs create data format mismatches between design systems and asset management platforms, causing version conflicts across teams.","AEC (Architecture, Engineering & Construction) — multi-discipline design workflows with format incompatibility and version control problems across the project lifecycle are the defining challenge of this vertical.","Transportation — large-scale infrastructure projects with multi-party contractor handoffs and version disagreements are common in this sector, particularly across civil and structural teams."],
+    ans:2, rationale:"Multi-discipline design workflows, format incompatibility between teams, and version control problems across a project lifecycle — this is unmistakably AEC. FME Form leads because the immediate pain is converting and synchronizing data between the tools architects, engineers, and contractors each use, not automating at server scale." },
+
+  { n:11, module:"Module 2 — Know Your Customer & Messaging",
+    q:"A prospect works for a regional government authority that coordinates planning, permitting, emergency response, and infrastructure across a dozen municipalities. They say their biggest recurring problem is that each municipality uses different systems, and during a major incident, it takes hours to get everyone working from the same data. Which industry are they from, and which FME capability is most relevant?",
+    opts:["Government — multi-jurisdiction data integration and automated synchronization across municipalities so all teams are working from the same live data during planning or incident response.","Utilities — emergency response coordination across a service territory with real-time infrastructure monitoring is a common utilities challenge; FME Flow's event-driven automation is most relevant.","Public Safety — police, fire, and EMS data coordination across jurisdictions during incidents is the defining public safety challenge; FME's real-time streaming is the primary capability.","Transportation — multi-agency coordination across highway and transit systems during incidents is a core transportation challenge; FME Flow's scheduling capability addresses the data synchronization problem."],
+    ans:0, rationale:"Regional government authority coordinating planning, permitting, and emergency response across multiple municipalities — this is unmistakably Government. The multi-jurisdiction challenge during active incidents (everyone on different systems) is exactly the FME use case: automated data synchronization so every team has the same operational picture." },
+
+  { n:12, module:"Module 2 — Know Your Customer & Messaging",
+    q:"A partner asks for help describing FME Flow to a non-technical business prospect. Which pitch best captures Flow's value?",
+    opts:["FME Flow is the workspace library and storage layer for FME — it hosts everything built in Form, manages version control, and provides a central repository that team members can access without FME installed on every machine.","FME Flow is the automation and deployment engine for FME — it runs and shares data workflows on schedules, in real time, or through user-facing apps, without end users needing any FME knowledge.","FME Flow is Safe Software's cloud data warehousing solution — it replaces traditional ETL pipelines with a managed, cloud-native environment where large data volumes can be processed and made available across the organization.","FME Flow is generally only relevant for larger organizations with high data volumes or 24/7 automation requirements — smaller teams with periodic data needs will find that FME Form covers their requirements at a lower total cost."],
+    ans:1, rationale:"Flow's pitch leads with what it does for the organization: automation, scheduling, and user-facing deployment. Never frame it as optional or enterprise-only." },
+
+  { n:13, module:"Module 2 — Know Your Customer & Messaging",
+    q:"Which of the following most accurately describes a data challenge that is specific to Transportation customers — and one where FME adds direct value?",
+    opts:["Managing the financial reconciliation of infrastructure maintenance contracts across multiple regional authorities, where procurement systems don't integrate with project management tools.","Keeping operational data synchronized across multiple systems in real time — whether that's indoor wayfinding maps at an airport, vehicle positions for a transit authority, or pavement condition records for a highway department — so field and operations teams are always acting on current information.","Automating environmental compliance reporting for government regulators, where data must be extracted from legacy systems and converted to meet changing submission specifications on tight deadlines.","Connecting passenger-facing journey planning applications to back-end timetabling and ticketing platforms so real-time departure and disruption information reaches travellers without manual intervention."],
+    ans:1, rationale:"Real-time operational data accuracy across systems is the defining Transportation challenge — airports, transit authorities, and highway departments all share the same core problem: multiple systems that need to reflect the same current reality simultaneously. FME's ability to connect and synchronize disparate systems is a direct fit." },
+
+  // MODULE 3
+  { n:14, module:"Module 3 — Discovery Conversations",
+    q:"You ask a prospect: \"What business systems are you currently using — both on-premises and cloud-based?\" What is this discovery question designed to accomplish?",
+    opts:["Surface a specific pain point by asking directly what isn't working in their current setup","Invite the prospect to articulate what they'd gain from solving a problem already identified","Establish context about the prospect's current environment — tools, systems, and scale — before surfacing any problems","Explore the downstream business consequences of a problem the prospect has already described"],
+    ans:2, rationale:"This is a current state question — its purpose is to build context before surfacing problems. Jumping straight to pain before understanding the environment produces generic, unfocused discovery." },
+
+  { n:15, module:"Module 3 — Discovery Conversations",
+    q:"A prospect says: \"We spend hours every week manually exporting data from our GIS into our asset management system.\" You respond: \"How does that time burden affect your team's ability to respond to urgent field requests?\" What is this follow-up question designed to do?",
+    opts:["Help the prospect articulate what they'd gain if the manual process were eliminated","Explore the downstream business consequences of the problem they've described","Understand how their current tools and systems are configured and connected","Surface additional data problems the prospect hasn't mentioned yet"],
+    ans:1, rationale:"The prospect named a pain. The right next move is a consequence question — connect the manual work to real business impact. This is what builds urgency and earns the right to pitch a solution." },
+
+  { n:16, module:"Module 3 — Discovery Conversations",
+    q:"After uncovering a prospect's pain around manual data workflows, you ask: \"If that entire process were automated, what would your team be able to focus on instead?\" What is this question designed to accomplish?",
+    opts:["Understand the prospect's current tooling and technical workflow in more detail","Identify other problems the prospect may not have raised yet in the conversation","Explore the downstream organizational consequences of the manual process","Invite the prospect to articulate in their own words what solving the problem would be worth to them"],
+    ans:3, rationale:"This is a value-connection question — it helps the prospect describe the benefit in their own language. This is far more powerful than the rep stating FME's value, because the prospect is making the case for change themselves." },
+
+  { n:17, module:"Module 3 — Discovery Conversations",
+    q:"You're preparing for a call with a GIS Analyst at a commercial real estate firm. Which opening approach best reflects good consultative discovery practice?",
+    opts:["\"Let me walk you through FME — I think you'll find it directly relevant to your work.\"","\"How much budget has your team allocated for new data tools this year?\"","\"What types of projects are you currently supporting with spatial analysis, and where are you losing the most time in your data prep workflows?\"","\"Before I ask you anything, let me share a couple of customer stories from commercial real estate — it'll give you a sense of where FME tends to fit.\""],
+    ans:2, rationale:"Good discovery openers establish current state and surface pain — understand context first, then find the problems. Leading with product, pricing, or even customer stories before asking questions skips the discovery that earns the right to pitch." },
+
+  { n:18, module:"Module 3 — Discovery Conversations",
+    q:"A prospect says their team relies heavily on custom Python scripts for data integration. What's the best discovery follow-up sequence?",
+    opts:["Ask a current state question to understand how they use Python, then pain-surfacing questions to surface its limitations, then consequence questions to help them feel the real cost of those limitations.","Reframe the conversation immediately around FME as a Python replacement — they're already invested in automation thinking, which means they understand the value, and FME delivers everything Python does without the developer overhead.","Acknowledge that Python is a strong, flexible tool and a perfectly valid choice for their team — then pivot to other areas where FME might add value, such as format connectivity or enabling non-developer workflows.","Jump straight to a value-connection question and ask if they'd be open to a demo — you've identified a competitive opening and moving quickly is the most efficient way to demonstrate FME's advantages over a scripted approach."],
+    ans:0, rationale:"Good discovery has a sequence. Jumping to value-connection questions without first establishing current state and surfacing Python's real limitations is just feature-dumping. Build context, surface the problem, explore consequences — then position FME." },
+
+  { n:19, module:"Module 3 — Discovery Conversations",
+    q:"A new hire at a partner company asks why they should focus on asking questions before pitching FME. Which answer best captures the reason?",
+    opts:["It gives you a structured question sequence that removes guesswork and reliably surfaces pain without requiring extensive preparation before each call.","It lets you navigate complex multi-stakeholder environments, build credibility through curiosity, and connect FME to genuine business needs — rather than leading with product features that may not be relevant to this specific prospect.","It compresses discovery time by quickly surfacing the prospect's budget, authority, and timeline — getting deals to the proposal stage faster than open-ended questioning approaches.","It gives you a structured way to learn FME's capabilities by mapping product features to different prospect pain scenarios during live customer conversations."],
+    ans:1, rationale:"Consultative discovery is about understanding before proposing. In complex, multi-stakeholder environments — which is where most FME conversations happen — this approach builds the credibility and relevance that makes your pitch land." },
+
+  { n:20, module:"Module 3 — Discovery Conversations",
+    q:"A healthcare prospect says: \"Our clinic location data in the central system is always out of date — it's a constant problem for our teams.\" Which response best continues the discovery conversation?",
+    opts:["\"Great — FME can automate that sync. Would you like to see a quick demo?\"","\"Have you considered running a weekly manual export as a short-term fix?\"","\"Is your budget cycle in Q3 or Q4 this year?\"","\"What are the downstream consequences when that location data is out of date — for clinical decisions or compliance reporting, for example?\""],
+    ans:3, rationale:"The prospect has stated the problem. The right next move is to explore its consequences — help them articulate the real business cost before positioning FME as the answer." },
+
+  { n:21, module:"Module 3 — Discovery Conversations",
+    q:"You're on a discovery call with a GIS Manager at a regional government authority. They tell you: \"Keeping spatial datasets consistent across our 12 municipalities is a real struggle.\" Which question best explores the business consequences of this problem?",
+    opts:["\"How do those inconsistencies affect your ability to meet compliance deadlines or respond to planning requests from stakeholders?\"","\"What GIS software are the 12 municipalities currently using across the region?\"","\"Would you like to see how FME handles multi-jurisdiction data standardization?\"","\"Is your team more comfortable with a no-code tool, or would they need developer support for implementation?\""],
+    ans:0, rationale:"B is a current state question; C jumps straight to solution; D is premature qualification. A is the consequence question — it connects the stated struggle to real organizational impact: compliance risk, stakeholder expectations, response times." },
+
+  // MODULE 4
+  { n:22, module:"Module 4 — Discovery & Demo Calls",
+    q:"A prospect says budget isn't available until next fiscal year. Before you do anything else, what's the most important thing to establish?",
+    opts:["Whether there's an existing budget approval process you can help them navigate — getting a formal quote on file now can accelerate next year's procurement cycle significantly.","The exact start date of their next fiscal year, so you can schedule a follow-up call at the right time and keep FME on their radar through the budget cycle.","Whether it's a timing issue or a prioritisation issue — if FME isn't in next year's budget yet, helping them build the internal business case now is more valuable than waiting for the calendar to turn.","Whether there's a smaller pilot or proof of concept that could be funded within this year's discretionary budget, allowing work to begin while the full project waits for the next cycle."],
+    ans:2, rationale:"'Budget next year' can mean two very different things: the money exists but isn't available yet, or FME hasn't been prioritised and isn't in the plan at all. The response to each is completely different. Establishing which it is before doing anything else is the difference between a deal that closes next quarter and one that never closes at all." },
+
+  { n:23, module:"Module 4 — Discovery & Demo Calls",
+    q:"Toward the end of a discovery call you say: \"So what I'm hearing is that manual export delays are creating real bottlenecks in your planning cycle — does that sound accurate?\" What step of the call structure is this?",
+    opts:["Discovery Questions","Intro and agenda-setting","Next Steps","Recap and Alignment"],
+    ans:3, rationale:"Summarizing and validating builds trust and confirms mutual understanding. If your summary is wrong, you find out now — not after you've built a proposal." },
+
+  { n:24, module:"Module 4 — Discovery & Demo Calls",
+    q:"Based on your pre-call research, you anticipate the prospect will want to go deep on technical architecture. What should you do?",
+    opts:["Prepare to answer technical questions yourself — product depth builds credibility with technical buyers.","Reschedule the discovery call as a technical demo session instead.","Request a technical resource to join the call in advance so a specialist is available when the conversation goes deep.","Redirect all technical questions to FME documentation and keep the call focused on business value."],
+    ans:2, rationale:"Coordinate support before the call — not during. Being caught flat-footed on architecture erodes credibility at exactly the wrong moment." },
+
+  { n:25, module:"Module 4 — Discovery & Demo Calls",
+    q:"A prospect asks about pricing midway through your first discovery call, before you've fully understood their use case. What's the best response?",
+    opts:["Acknowledge the question, let them know pricing depends on their specific needs, and commit to providing tailored pricing detail once you've better understood their requirements.","Give them a rough price range immediately so they can assess whether FME fits their budget.","Decline to discuss pricing at all on discovery calls and refer them to your commercial team.","Share the entry-level perpetual license price as a reference point — it gives them a concrete floor to assess budget fit while you keep gathering information."],
+    ans:0, rationale:"Pricing conversations are more effective — and more accurate — after needs are established. Offering a number before understanding the use case anchors the conversation in the wrong place and weakens your positioning." },
+
+  { n:26, module:"Module 4 — Discovery & Demo Calls",
+    q:"You've just finished a strong discovery call. The prospect is interested and asks what happens next. How do you close the call?",
+    opts:["Promise to email a detailed pricing proposal within 24 hours.","Ask for the prospect's manager's contact details so you can escalate the conversation.","Agree on specific next steps — clarifying who needs to be involved on the prospect's side and capturing their availability for a follow-up call or demo before hanging up.","Close by summarizing the pain points you uncovered and let them know you'll send a tailored proposal within the week for them to review at their own pace."],
+    ans:2, rationale:"Always close a discovery call with confirmed, specific next steps — who, what, and when. Sending a proposal without a scheduled follow-up conversation lets momentum die. The prospect reads it on their own time, priorities shift, and you lose control of the deal." },
+
+  { n:27, module:"Module 4 — Discovery & Demo Calls",
+    q:"Before a demo call, what is the most important thing the sales rep must do to prepare the technical resource who will lead the demo?",
+    opts:["Run the demo yourself rather than creating a dependency on technical resources — demonstrating the product builds your own credibility with technical buyers and eliminates scheduling risk when a prospect is ready to move quickly.","Brief the technical resource thoroughly — including the use case, company context, key pain points, decision-makers, and what success looks like for this specific demo.","Send the technical resource a brief email 10 to 15 minutes before the call with the prospect's company name and general industry — that's usually enough context for an experienced SE to tailor their approach in real time.","Only loop in a technical resource if the prospect explicitly asks for a deep technical walkthrough — bringing in a specialist unprompted can signal to the prospect that you lack product confidence."],
+    ans:1, rationale:"A tailored demo depends entirely on the quality of the brief. Vague context produces generic demos. Specific context produces demos that close deals." },
+
+  { n:28, module:"Module 4 — Discovery & Demo Calls",
+    q:"During a demo, the prospect's technical team goes deep on a niche data format question. What is the sales rep's role?",
+    opts:["Answer the technical question in detail to demonstrate product depth.","Stay completely silent and let the technical resource handle everything.","End the demo and schedule a more focused technical session later.","Facilitate — help steer the conversation back to the prospect's business goals, step in with relevant context or customer examples, and ask questions that move the demo forward."],
+    ans:3, rationale:"The sales rep facilitates, not presents. Technical questions go to the specialist — the rep keeps the conversation connected to outcomes the prospect cares about." },
+
+  // MODULE 5
+  { n:29, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A government prospect says: \"We've been using Esri for years — why would we consider FME?\" Which response best positions FME?",
+    opts:["\"FME works alongside Esri — many of our largest government customers use both. FME handles the data integration and transformation layer that Esri doesn't natively cover: connecting non-Esri systems, automating data flows, and supporting 500+ formats without manual intervention.\"","\"FME is a direct Esri competitor that offers a more cost-effective alternative for data integration — many government customers have successfully replaced significant parts of their Esri workflow with FME at a lower total cost of ownership.\"","\"FME offers a more modern and open GIS platform for most government use cases — its agnostic architecture and 500+ format library make it a stronger long-term choice for organizations looking to reduce dependency on a single vendor.\"","\"If Esri is meeting your needs today, FME probably isn't the right conversation right now — the best time to revisit is when you're hitting data integration challenges that Esri's native tools can't solve efficiently on their own.\""],
+    ans:0, rationale:"FME is not an Esri replacement — it complements it. Many of Safe's largest customers run both. Never position FME as a rip-and-replace when the prospect has an existing Esri investment." },
+
+  { n:30, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A prospect's IT team says: \"We can just build our own integrations in Python — why pay for FME?\" What is the strongest response?",
+    opts:["\"Python is a better choice for developer-heavy teams — FME is more suited to non-technical users.\"","\"Python integrations are fine for simple use cases, but FME is more powerful for complex ones — particularly at scale.\"","\"That's a fair point — if your developers have capacity, Python can handle straightforward integration work just as well as FME.\"","\"Custom Python integrations need to be built, tested, and maintained over time — FME eliminates that ongoing burden, supports 500+ formats and systems out of the box, and empowers non-technical team members to build and modify workflows without developer involvement.\""],
+    ans:3, rationale:"Never concede the technical audience. FME's advantage over Python: no maintenance burden, 500+ connectors out of the box, and the ability to empower non-technical users. The total cost of developer time to build, test, and maintain custom integrations almost always exceeds FME licensing cost." },
+
+  { n:31, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A prospect is evaluating a cloud-based iPaaS tool alongside FME. What is FME's most relevant differentiator to highlight?",
+    opts:["FME is less expensive than most iPaaS tools on a per-user basis.","FME is the only data integration tool that functions without an internet connection.","FME's strength is deep data transformation — particularly for complex, spatial, and domain-specific formats that generic iPaaS tools don't support natively.","FME integrates with more cloud providers than any iPaaS solution currently on the market."],
+    ans:2, rationale:"Generic iPaaS tools handle common API-to-API flows. FME's differentiation is depth of transformation — especially spatial data and the 500+ format library." },
+
+  { n:32, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A prospect says they're happy with Informatica and aren't looking for a replacement. What's the most effective response that keeps the conversation open?",
+    opts:["Acknowledge their satisfaction and suggest they run FME alongside Informatica for a trial period — most customers find it easier to make a comparison when they can evaluate both in a real environment.","Agree that FME isn't a replacement — then ask whether there are data types like CAD, GIS, or BIM that Informatica doesn't handle well for them, since that's typically where FME fills the gap without displacing what they already have.","Suggest a side-by-side proof of concept — running FME on one of their existing data challenges alongside Informatica gives them a direct comparison to evaluate independently, without disrupting what they already have.","Explain that FME and Informatica serve fundamentally different purposes with no real overlap — FME handles spatial and domain-specific data while Informatica manages enterprise application integration."],
+    ans:1, rationale:"Never position FME as a replacement for a tool a customer is satisfied with — that's an argument you won't win. The right move is to agree it's not a replacement, then find the edges where Informatica falls short — CAD, GIS, BIM, and other domain-specific formats it doesn't support natively. That's where FME adds value without threatening what they already have." },
+
+  { n:33, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A prospect asks whether every end user who accesses an FME Flow web app needs their own FME license. How do you clarify?",
+    opts:["Yes — every person who accesses an FME-powered application, even as a read-only user, requires a named Flow license assigned to them.","No — FME Flow is priced per department, not per individual — so the team head holds the license and end users access it through their departmental allocation.","No — FME Flow is only available as an organization-wide site license, so partial deployments for a single team or department aren't supported.","No — FME Form licenses control who can author workspaces; end users who interact with Flow-published apps don't need their own FME license — the Flow server license covers deployment to non-technical users."],
+    ans:3, rationale:"Non-technical end users don't need FME licenses — that's what makes Flow scalable across an organization. Form licenses are for the people building workspaces; Flow covers everything on the deployment and execution side." },
+
+  { n:34, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"What is the key difference between a fixed license and a floating license for FME Form?",
+    opts:["Fixed licenses are for cloud deployments; floating licenses are for on-premises installations.","There is no functional difference — they are the same license type with different commercial names.","A floating license is pooled and shareable across a team; a fixed license is locked to a specific machine and cannot be shared.","Fixed licenses are for individual contributors; floating licenses are reserved for team leads and managers."],
+    ans:2, rationale:"This comes up in nearly every Form deal. Fixed = one machine, one user. Floating = pooled concurrent seats via a license manager. When ordering: the first seat is FME Form Floating (unique serial); additional concurrent seats are FME Form Floating Concurrent User — added to the same serial, not ordered as separate Floating licenses." },
+
+  { n:35, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A prospect asks about the difference between standard FME Flow and FME Flow Hosted. What is the key distinction?",
+    opts:["FME Flow Hosted is managed and hosted by Safe Software on AWS; standard FME Flow is installed and managed on the customer's own infrastructure — on-premises or in their own cloud environment.","FME Flow Hosted includes all the same format connectors and capabilities as standard FME Flow, with the only difference being where the infrastructure is physically located.","The main distinction is licensing — Flow Hosted uses a consumption-based PAYG model by default, while standard FME Flow uses fixed annual licensing regardless of usage.","FME Flow Hosted is optimized for high-volume enterprise deployments, while standard FME Flow is better suited to smaller organizations that don't require large-scale cloud infrastructure."],
+    ans:0, rationale:"Standard Flow = customer hosts and manages their own server infrastructure. Hosted = Safe provides the hosting on AWS; the customer manages their instance but not the underlying servers. Hosted is right for smaller orgs with limited IT, but it doesn't support all features of standard Flow." },
+
+  { n:36, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"You're mid-discovery and a prospect raises a technical objection you genuinely don't know the answer to. What's the right move?",
+    opts:["Give your best answer based on what you know — showing confidence and product knowledge in the moment matters more than admitting you need to check something.","Redirect the question to the FME documentation and suggest the prospect review the relevant sections before your next call — they'll appreciate the resource and you avoid speculating.","Defer to your technical resource on the call if one is present — if not, schedule a follow-up technical session specifically to address the objection with the right specialist.","Don't guess — acknowledge the question, ask a follow-up to make sure you fully understand what they're asking, and commit to a specific follow-up with the right answer. Credibility comes from being accurate, not from never being stumped."],
+    ans:3, rationale:"Guessing on a technical question and getting it wrong is far more damaging than admitting you need to follow up. Prospects respect honesty and a clear commitment to a specific answer — what they don't forgive is being given wrong information that surfaces later in the deal. Ask a clarifying question, confirm you understand what they need, and come back with the right answer." },
+
+  { n:37, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A prospect asks: \"What are the different ways we can license FME?\" Which response accurately describes the three main licensing models?",
+    opts:["\"FME is only available as an annual subscription — Safe Software moved to a subscription-only model in 2023, which simplified purchasing and ensures all customers stay current on updates and support without separate maintenance renewals.\"","\"FME offers three main licensing models: Perpetual (a one-time purchase with annual maintenance), Subscription (a single annual price covering the full platform with flexibility to scale), and Consumption-Based Cloud (pay per CPU usage by the second, available through cloud marketplaces like Azure and Google).\"","\"FME uses a per-user named seat model — each person in your organization who works with data or runs FME workflows requires their own license, with volume pricing available for teams purchasing multiple seats.\"","\"FME is available exclusively through cloud marketplaces like Azure, AWS, and Google Cloud — this lets customers use existing cloud spend commitments and avoid a separate procurement process for software licensing.\""],
+    ans:1, rationale:"There are three distinct commercial models. Knowing them allows you to match the right model to the customer's situation rather than defaulting to one option for everyone." },
+
+  { n:38, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A prospective customer refers to their existing \"FME Server\" installation and asks whether it will be compatible with newer FME workflows. What do you know about this?",
+    opts:["FME Server was discontinued when Safe Software ended support for legacy product lines — customers still running it would need to rebuild their workspaces in FME Flow from scratch, though Safe Software's migration tooling simplifies the process significantly.","FME Server is a separate legacy product line from FME Flow — built for older on-premises environments, it runs on a different architecture, so FME Server workspaces require conversion before they'll run correctly in FME Flow.","FME Server was Safe Software's original cloud-hosted offering — it was rebranded as FME Flow Hosted when Safe migrated to AWS infrastructure, and existing FME Server accounts were automatically transitioned to the new hosted environment.","\"FME Server\" is the former name for FME Flow — they are the same product. The rename was part of a broader update: FME Desktop became FME Form, FME Server became FME Flow, and FME Cloud became FME Flow Hosted."],
+    ans:3, rationale:"Partners and employees may encounter customers using old product names. Knowing that Desktop = Form, Server = Flow, and Cloud = Flow Hosted prevents confusion and builds credibility." },
+
+  { n:39, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"A long-standing FME customer is on perpetual licenses and approaching their annual maintenance renewal. They're also asking about adding more licenses. When does it make sense to suggest exploring a switch to subscription?",
+    opts:["When the customer's FME plans are outpacing what perpetual can accommodate cleanly — they want to add Flow to an existing Form deployment, they have projects requiring more licenses or engines, or they're dealing with repeated separate procurement events for every FME expansion. A subscription removes those barriers and gives unrestricted access to the full platform with one annual investment.","Subscription is a conversation to have when the customer brings it up first — raising it unprompted risks being perceived as a push to increase their spend rather than a genuine recommendation. If the customer hasn't signalled dissatisfaction with how they're currently licensed, the renewal conversation should stay focused on confirming AM value and their near-term FME plans.","For most perpetual customers at renewal, the economics only make sense once their license count has grown to a meaningful threshold — smaller deployments with a handful of Form licenses rarely benefit from the model, and the simplified procurement structure isn't worth the trade-off for organizations with stable, limited usage. Perpetual plus AM typically delivers better long-term value for these accounts.","The clearest trigger for a subscription conversation is a cloud migration — customers planning to move workloads to AWS or Azure, or already running there, are where the model is most compelling. For customers with stable on-premises usage, perpetual licensing remains the more straightforward option and typically delivers better value."],
+    ans:0, rationale:"The trigger for the subscription conversation is growth intent, not a cost calculation. When a customer's FME plans are bigger than what perpetual procurement can accommodate without friction, that's the moment to raise it. Procurement friction removal and unrestricted platform access are the value drivers — cost efficiency is a supporting point, not the headline." },
+
+  { n:40, module:"Module 5 — Competitive Positioning, Pricing & Licensing",
+    q:"Safe Software offers industry-specific subscription programs tailored to particular customer segments. Which of the following is NOT one of these programs?",
+    opts:["Local Government","Small Utilities","Financial Services","Education"],
+    ans:2, rationale:"Safe Software's industry-specific programs include: Local Government, Small Utilities, Education, Airports, Public Safety, and Enterprise. Financial Services is not a named program." },
+
+  // MODULE 6
+  { n:41, module:"Module 6 — The Channel Partner Model",
+    q:"A prospect who has evaluated several data integration tools asks what makes FME worth a serious look. They've heard the '500 formats' line before. What's the most compelling thing to say next?",
+    opts:["The format count is actually higher than 500 now — Safe Software has continued adding connectors and the current library is significantly broader than competitors typically offer.","The format count is the proof point, not the pitch — the real differentiator is that FME handles the complex, hard-to-move data that other tools skip over entirely, like CAD, GIS, BIM, and point clouds, combined with a no-code environment that puts that power in the hands of the people who actually own the data.","The 500 format claim is where FME starts, not ends — the deeper story is the automated workflow scheduling and deployment capabilities that most integration tools require significant development work to replicate.","Lead with Safe Software's Gartner Magic Quadrant recognition — being named for six consecutive years demonstrates that FME is an established, analyst-validated platform, and for prospects who've already heard the format count, third-party credibility is often the more persuasive angle."],
+    ans:1, rationale:"The 500+ figure is evidence, not the pitch. What makes FME genuinely different is that it handles the data types other tools simply don't support — spatial, CAD, BIM, point cloud — and makes that capability accessible through a no-code interface. That's the conversation that lands with an evaluator who's already heard the format count." },
+
+  { n:42, module:"Module 6 — The Channel Partner Model",
+    q:"A prospect asks how FME compares to a data integration tool you're not familiar with. What's the best response?",
+    opts:["Confirm that you know the tool well and give a comparison based on general knowledge of FME — prospect confidence is built by demonstrating competitive awareness, even if some details need to be followed up later.","Be upfront that you're not familiar enough with that specific tool to give a fair comparison, commit to following up with more detail, and pivot to what makes FME stand out regardless of the competitor: deep support for spatial, CAD, and domain-specific formats, a no-code visual environment, and a unified platform.","Tell the prospect that if the tool isn't in Safe Software's competitive materials, it's likely not a significant competitor in the FME space and the comparison probably isn't relevant to their evaluation.","Ask the prospect to share the competitor's documentation — reviewing it together on the call is an efficient way to build a real-time comparison and shows that you take their evaluation seriously."],
+    ans:1, rationale:"Never guess on a competitive comparison — getting it wrong is far worse than admitting you need to look it up. Be honest about the gap, commit to a specific follow-up, and keep the conversation grounded in FME's genuine strengths." },
+
+  { n:43, module:"Module 6 — The Channel Partner Model",
+    q:"A technically strong prospect says their team will just write Python scripts instead of buying FME. You know they're capable of doing it. Three months later, two source systems update their schemas and a third changes its API. What's the strongest argument FME would have handled this better?",
+    opts:["Acknowledge their capability and position FME as a complement to Python-based work — the most effective approach is usually to show where FME adds value in areas Python doesn't cover easily, like format breadth and the non-developer accessibility angle.","The real cost isn't building the scripts — it's maintaining them. Every time a source system changes, a format updates, or someone new joins the team, those scripts need to be reworked. FME absorbs that maintenance burden so their developers can focus on work only they can do.","The capability argument for Python is overstated for most integration use cases — FME is technically equivalent for all practical purposes, and the no-code interface saves significant development time without sacrificing what their team could do in Python.","Python scripts create a key-person dependency — when the developer who wrote them leaves, the institutional knowledge goes with them, and that's a business continuity risk that structured tools like FME eliminate."],
+    ans:1, rationale:"Developers can always build it. The question is whether they should. The maintenance cost is the real argument — every system change, format update, and team change means rework. FME absorbs that so their best developers stay focused on differentiated work." },
+
+  { n:44, module:"Module 6 — The Channel Partner Model",
+    q:"You're on a renewal call. The customer has verbally confirmed they want to renew but hasn't signed yet. They casually mention that another team in their organization has been manually exporting data to Excel every week to do something FME already does for the original team. What do you do with that?",
+    opts:["Note it down for future reference — it's worth revisiting after the renewal is secured so the conversation isn't derailed by expanding scope at a sensitive moment in the sales cycle.","Acknowledge it briefly but keep the call focused on renewal — introducing expansion opportunities before the renewal is confirmed risks complicating the decision and opening unnecessary budget conversations.","Flag it as an expansion signal — get curious about what that team is doing, make the connection to what FME already delivers elsewhere in the organization, and start building a path to that team through your existing champion.","Treat it as a potential competitive signal — another team using manual workarounds may be evaluating alternatives, and you should confirm they aren't speaking to other vendors before refocusing on the renewal."],
+    ans:2, rationale:"Manual workarounds in the same organization are expansion gold. The customer already trusts FME and you have a champion. Get curious, make the connection, and build the path — don't wait until after the renewal to act on a warm signal." },
+
+  { n:45, module:"Module 6 — The Channel Partner Model",
+    q:"Which of the following best describes how the channel partner model works at Safe Software?",
+    opts:["Partners operate as autonomous resellers — they manage their own pricing, execute contracts directly with end customers, and engage Safe Software only for technical support after the deal is closed.","Partners source and co-sell FME within a managed channel framework — Safe Software provides pricing guidance, approval processes, and contract execution support throughout the deal.","Partners focus exclusively on post-sale services — implementation, training, and technical support — while all FME license sales are handled directly by Safe Software's internal account management team.","Partners only engage with prospects that Safe Software has already pre-qualified and formally assigned to them through the PRM — self-sourced deals require separate approval before they can be progressed."],
+    ans:1, rationale:"Partners are an extension of Safe's sales team within a managed model. Pricing and contracts still go through Safe's processes." },
+
+  // MODULE 7
+  { n:46, module:"Module 7 — Competitive Positioning & AI Strategy",
+    q:"A prospect is currently using Microsoft Fabric for data pipelines and asks whether FME adds anything on top of it. What's the most effective positioning?",
+    opts:["FME is a direct competitor to Microsoft Fabric — for organizations already invested in Fabric, FME is unlikely to add meaningful value and the conversation should be deprioritized.","FME and Microsoft Fabric serve different strengths — Fabric handles cloud-native enterprise analytics pipelines, while FME's differentiator is deep support for spatial, CAD, BIM, and domain-specific formats that Fabric doesn't natively handle.","FME replaces Microsoft Fabric for organizations that need broader format support — the case is straightforward once they've experienced format limitations in Fabric.","Microsoft Fabric and FME are functionally equivalent for most use cases — the decision usually comes down to cost and existing Microsoft licensing commitments."],
+    ans:1, rationale:"FME and Fabric aren't the same tool for the same job. Fabric handles cloud-native analytics and BI pipelines well; FME's differentiation is the depth of its format library — spatial, CAD, BIM, and domain-specific data that Fabric doesn't natively support. The right positioning is complementary, not competitive." },
+
+  { n:47, module:"Module 7 — Competitive Positioning & AI Strategy",
+    q:"Safe Software's partner materials position FME around 'All Data. Any AI.' and 'The Power of Choice.' A prospect asks what that means in practice. Which response best captures the core message?",
+    opts:["FME replaces the need for separate AI tools — by handling data transformation and analytics natively, FME eliminates the need to integrate external AI systems into customer workflows.","FME's AI relevance is primarily for customers already building their own models — for all other customers, AI and FME serve separate purposes with no meaningful overlap.","FME connects any data to any AI in both directions — it can expose data and workflows for AI agents to consume, and FME workflows can call any AI or MCP-enabled service, with no lock-in to any specific AI provider.","FME's AI integration is built specifically around Anthropic's Claude — as the creator of MCP, Anthropic is Safe Software's primary AI partner for enterprise deployments."],
+    ans:2, rationale:"'The Power of Choice' is the headline — any data, any AI, any infrastructure, no lock-in. The bidirectional aspect is key: FME exposes data and workflows for AI to consume (via FME Flow's MCP Server), and FME workflows can call any AI or MCP-enabled service (via the MCPCaller Transformer). Customers can swap AI providers as models evolve — the FME integration layer stays the same." },
+
+  { n:48, module:"Module 7 — Competitive Positioning & AI Strategy",
+    q:"A customer asks how FME supports MCP. According to Safe Software's partner materials, FME's MCP capability works in two directions. Which statement accurately describes both?",
+    opts:["FME's MCP support is inbound only — AI agents can call FME Flow workspaces as MCP tools, but FME workflows cannot yet call external MCP-enabled services or AI models.","FME Flow acts as an MCP Server so any MCP-compatible AI can trigger FME workflows, and the MCPCaller Transformer lets FME workflows call tools from any external MCP-enabled service — making the integration fully bidirectional.","FME's MCP capability works only with Anthropic's Claude — other AI providers require separate integration work until a universal MCP standard is adopted across the industry.","The MCPCaller Transformer is FME's only current MCP feature — FME Flow's MCP Server capability is still in development and not yet available to customers or partners."],
+    ans:1, rationale:"MCP in FME is bidirectional. FME Flow as an MCP Server exposes FME workspaces as AI-callable tools — any MCP-compatible AI (Claude, OpenAI, Copilot) can trigger FME workflows. The MCPCaller Transformer lets FME call tools from any MCP server. There is no AI vendor lock-in. MCPCaller launched in FME 2026.1; MCP Server beta in FME 2026.2. Both are included at no extra cost for Form and Flow customers." },
+
+  // MODULE 8
+  { n:49, module:"Module 8 — Customer Resources & Success",
+    q:"A new FME customer asks where they can go to learn FME through structured, self-paced courses and earn official certifications. Which Safe Software resource is the right recommendation?",
+    opts:["FME Hub — the community-driven marketplace for FME content including workspace templates and custom transformers","FME Community — the user forum where FME questions are asked and answered by practitioners","FME Academy — Safe Software's online learning platform with structured courses, tutorials, and official FME certifications for users at all skill levels","The FME Accelerator — a guided program designed to fast-track initial FME deployments for new customers on specific use cases"],
+    ans:2, rationale:"FME Academy (academy.safe.com) is the structured learning and certification platform. Community = Q&A forum; Hub = content marketplace; Accelerator = fast deployment program." },
+
+  { n:50, module:"Module 8 — Customer Resources & Success",
+    q:"A prospect asks where FME users find and share custom transformers, workspace templates, and other community-built FME content. Which resource do you recommend?",
+    opts:["FME Academy — it includes a library of shareable workspace templates for common use cases alongside its training content","The Safe Software Knowledge Base — where Safe officially releases all FME documentation and downloadable content","The Partner Portal — where FME partners upload templates and custom workflows for customer use","FME Hub — the community marketplace where FME users discover and share transformers, workspace templates, connectors, and other reusable FME assets"],
+    ans:3, rationale:"FME Hub (hub.safe.com) is the community content marketplace. Academy = structured learning; Community = Q&A forum; Hub = downloadable content and community-built assets." },
+
+  { n:51, module:"Module 8 — Customer Resources & Success",
+    q:"A new partner hire wants to get up to speed with FME quickly through a structured, guided getting-started experience. Which Safe Software resource is specifically designed for this?",
+    opts:["FME Community — where experienced FME users share advice and answer questions from practitioners at all skill levels","FME Hub — where users download community-built workspace templates covering many common use cases and formats","The FME Accelerator — a structured crash-course pathway in FME Academy designed to get new users up and running with FME quickly through guided learning","FME Academy's full certification track — which new users work through at their own pace to earn official FME certifications"],
+    ans:2, rationale:"The FME Accelerator is the structured fast-track getting-started experience within FME Academy. It's designed to get new users up and running quickly through a guided pathway — not a self-directed browse through the full catalog." },
+
+  // MODULE 5 CONTINUED
+  { n:52, module:"Module 5 (continued) — AM & Engine Licensing",
+    q:"A perpetual FME customer asks what their Annual Maintenance will cost to renew after the first year. What do you tell them?",
+    opts:["AM renewal is included in the original purchase price — there is no separate renewal charge after year one.","AM renewal is a fixed flat fee determined at the time of the original purchase, regardless of list price changes.","AM renewal costs 25% of the software's current list price per year — the first year is included with the original purchase.","AM can only be renewed through a subscription upgrade — perpetual customers lose AM access after the first year."],
+    ans:2, rationale:"Annual Maintenance renews at 25% of the software's current list price per year. The first year is always included with a new FME Form or Flow purchase." },
+
+  { n:53, module:"Module 5 (continued) — AM & Engine Licensing",
+    q:"A perpetual customer's Annual Maintenance is current and they want to swap their Form Fixed license for a Form Floating license of equivalent value. Is there a charge, and what happens to the expiration date?",
+    opts:["Yes — any license type change triggers a new purchase event with a full license fee, regardless of cost difference.","No — but the trade resets the AM clock. The new Floating license starts a fresh 12-month Annual Maintenance period from the processing date, so the customer effectively gains coverage time.","Yes — Fixed to Floating is always treated as an upgrade because Floating licenses offer more deployment flexibility; the price difference is invoiced and the expiration date resets from the processing date.","No — trades between license types of the same use category are free, and the new license inherits the original expiration date."],
+    ans:3, rationale:"Free trades apply when the customer stays within the same use type (e.g., Form Fixed ↔ Form Floating) and Annual Maintenance is current — assets with expired AM are not eligible to trade. The new asset inherits the original AM expiration date; it does not receive a fresh year of maintenance." },
+
+  { n:54, module:"Module 5 (continued) — AM & Engine Licensing",
+    q:"A customer on FME Flow asks about CPU Usage Engines as an alternative to standard engines. Which statement best describes how this model works?",
+    opts:["CPU Usage Engines are the default engine type included with all FME Flow licenses — they replace standard engines in all new purchases.","CPU Usage Engines are a consumption-based, subscription-only model where customers purchase a bank of CPU hours — hours are consumed only during active processing, idle engines use no credits, and unused hours expire at the end of the annual term.","CPU Usage Engines are a perpetual licensing option that eliminates the need for annual renewals on FME Flow engine capacity.","CPU Usage Engines are only available to customers with Enterprise or Unlimited subscription agreements."],
+    ans:1, rationale:"CPU Usage Engines are consumption-based — credits are spent only during actual processing, not idle time. Unused hours do not carry forward to the next term." }
+];
+
+const ROLE_SPECIFIC = {
+  employee: [
+    { n:55, module:"Employee Track — Q55–60",
+      q:"A new inbound lead arrives in HubSpot via a website form submission. What lifecycle stage is it automatically assigned?",
+      opts:["Marketing Qualified Lead (MQL)","Sales Qualified Lead (SQL)","Customer","Sales Accepted Lead (SAL)"],
+      ans:0, rationale:"All inbound leads enter HubSpot at MQL. MQL → SAL when a BDR assigns it; MQL → SQL when the BDR queues it for the AM team." },
+    { n:56, module:"Employee Track — Q55–60",
+      q:"A BDR opens a new lead in HubSpot and notices the company is already marked as a Safe Software customer. What should they do?",
+      opts:["Continue qualifying the lead — existing customers can still generate net new opportunities for the BDR queue.","Disqualify the lead and mark it as \"Bounced.\"","Mark the lead as \"Disqualified\" since existing customers don't enter the BDR queue.","Assign the lead to the current Account Manager and notify them via Slack."],
+      ans:3, rationale:"Existing customer accounts belong to the current AM. Route it correctly and notify — don't qualify it yourself." },
+    { n:57, module:"Employee Track — Q55–60",
+      q:"A BDR has qualified a lead and confirmed it's ready for the Account Manager team. Which approach correctly describes the BDR's handoff responsibility?",
+      opts:["Email the AM with the prospect's details — HubSpot gets updated once the AM accepts the lead and starts working it.","Ensure both the Contact and Company records in HubSpot are fully complete, then use HubSpot's built-in routing mechanism to officially move the lead to the AM queue — do not rely on email, Slack, or creating a Deal independently.","Mark the lead as Disqualified in HubSpot and leave a detailed handoff note in the contact activity log for the AM to find.","Create a new Deal record in HubSpot and assign it directly to the AM — this is the standard signal that a lead is ready for the account team."],
+      ans:1, rationale:"The BDR's job before handoff is twofold: complete the records and use the proper routing mechanism. Ad hoc handoffs — email, Slack, or manually creating a Deal — bypass the system, create tracking gaps, and risk the lead falling through the cracks. Full records plus correct routing is the standard." },
+    { n:58, module:"Employee Track — Q55–60",
+      q:"You are logging notes from a discovery call that was scheduled in advance via a calendar invite. Which HubSpot activity type do you select?",
+      opts:["Task","Call","Meeting","Note"],
+      ans:2, rationale:"Pre-scheduled calls = \"Meeting.\" Unscheduled calls (cold calls, inbound) = \"Call.\" This distinction keeps your activity log accurate and scannable." },
+    { n:59, module:"Employee Track — Q55–60",
+      q:"To finalize an FME subscription agreement at the end of a deal cycle, which tool do you use to request the contract?",
+      opts:["IronClad","HubSpot Deals > Generate Quote","Jira > New Ticket > Legal Request","The PRM portal"],
+      ans:0, rationale:"Subscription agreements are requested through IronClad. This applies to both direct and channel deals." },
+    { n:60, module:"Employee Track — Q55–60",
+      q:"An enterprise customer in the utilities sector mentions during a renewal call that they recently experienced significant downtime due to a critical FME workflow failure, and that their team lacks in-house FME expertise. Which Premium Support offering do you introduce first, and why?",
+      opts:["Premium Extended — it includes 24/7 global coverage, which is ideal for downtime-sensitive industries.","Premium Core — it prioritizes critical issues and provides access to senior technical experts during Safe Software's business hours. It is also the required starting point, as it is a prerequisite for any higher tier.","Premium Advanced — it includes a dedicated Technical Account Manager who can proactively prevent issues like the one they experienced.","Standard support is sufficient for this scenario — Premium Support is only relevant for financial services and telecom."],
+      ans:1, rationale:"Premium Core is always the entry point — it's a prerequisite for both Advanced and Extended. It directly addresses the customer's stated concerns: critical issue prioritization and access to senior experts." }
+  ],
+  partner: [
+    { n:55, module:"Partner Track — Q55–60",
+      q:"As an FME partner, how do you formally register a new opportunity to ensure it is attributed to your organization?",
+      opts:["Email your Safe Software Channel Development Manager with the prospect's contact information.","Create the deal in your own CRM and notify Safe Software by phone or Slack.","Submit the deal through the Partner Relationship Management (PRM) portal for formal registration.","Register the opportunity verbally during your next scheduled call with your Channel Development Manager."],
+      ans:2, rationale:"Deal registration lives in the PRM. Email, Slack, and verbal notification are not formal registration — they don't protect the deal or ensure attribution." },
+    { n:56, module:"Partner Track — Q55–60",
+      q:"A prospect you're working with requests a technical FME demo that goes beyond your team's current expertise. What's the right step?",
+      opts:["Decline the demo request and suggest the prospect contact Safe Software directly.","Reach out to your Safe Software Channel Development Manager and request that they coordinate a technical resource from Safe's team to support or co-deliver the demo.","Run the demo anyway and supplement with FME product documentation where your knowledge has gaps.","Ask the prospect to attend a public FME webinar as an alternative to a tailored demo."],
+      ans:1, rationale:"Partners and Safe co-sell together. Requesting technical demo support is expected and encouraged — it's how the model is designed to work." },
+    { n:57, module:"Partner Track — Q55–60",
+      q:"A prospect is asking for pricing and you want to present a quote. What is the correct approach before quoting any figure?",
+      opts:["Quote based on your standard partner pricing without checking — speed in pricing conversations helps maintain momentum and prevents deals from stalling over a number.","Tell the prospect that FME pricing is fixed and identical for all customers regardless of deal size or structure.","Estimate based on a similar deal you've processed before and adjust the final invoice after closing if needed.","Confirm pricing with your Safe Software Channel Development Manager before quoting — all pricing must be approved and go through Safe's channel team."],
+      ans:3, rationale:"Partners do not set FME pricing independently. All pricing must be confirmed through Safe's channel team before being presented to a prospect. Quoting without checking risks committing to a figure Safe can't support — which creates problems at contract time." },
+    { n:58, module:"Partner Track — Q55–60",
+      q:"As a reselling partner, which of the following best describes your role in the FME sales process?",
+      opts:["You source and co-sell FME to end customers within a managed channel framework — Safe Software provides pricing guidance, contract support, and technical resources throughout the process.","You set your own FME pricing and execute contracts directly with end customers, independently of Safe Software.","Your role is limited to post-sale implementation services — FME license sales always go through Safe Software's direct team.","You can only engage with prospects that Safe Software has already pre-qualified and formally assigned to you."],
+      ans:0, rationale:"Partners operate within a managed channel model. Co-selling — not solo selling — is the operating model." },
+    { n:59, module:"Partner Track — Q55–60",
+      q:"A customer you sold FME to last year is approaching renewal and wants to expand their license count. What's the right process?",
+      opts:["Handle the renewal and expansion entirely on your own — it's an existing relationship you own.","Direct the customer to Safe Software's direct account team for all renewal conversations.","Coordinate the renewal and expansion with your Safe Software Channel Development Manager — renewals are joint opportunities and pricing approvals still apply.","Only involve Safe Software if the expansion exceeds a specific minimum dollar threshold."],
+      ans:2, rationale:"Renewals and expansions are joint opportunities. The partner stays involved, but Safe's channel team must be part of the conversation for pricing and contract execution." },
+    { n:60, module:"Partner Track — Q55–60",
+      q:"A prospect currently on FME perpetual licenses asks why they should consider switching to a subscription. Which is the strongest business case?",
+      opts:["Subscriptions are now required for all new FME purchases — Safe Software deprecated the perpetual model in 2024, so customers still on perpetual licenses are running end-of-life software that will lose support within the next two years.","Subscription pricing is always lower than perpetual in year one — the annual fee is structured to come in below the upfront perpetual cost, making it the financially obvious choice for any customer who is budget-sensitive.","Subscriptions remove the need for technical support and infrastructure management, since Safe Software handles all deployment, updates, and maintenance on the customer's behalf under the subscription agreement.","A subscription provides a single predictable annual invoice, full platform access, and the flexibility to scale — and when annual maintenance costs are growing alongside a need for more licenses, the total cost often makes more financial sense under subscription."],
+      ans:3, rationale:"The perpetual-to-subscription conversation is about growth and access, not cost arbitrage. Lead with: unrestricted access to the full platform, no procurement event every time they want to expand, and a single predictable annual investment. Cost efficiency is a supporting point — not the reason to switch." }
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let questions = [];
+let currentIdx = 0;
+let userAnswers = [];
+let track = '';
+let participantName = '';
+let participantEmail = '';
+let pendingAnswer = null;
+let answerConfirmed = false;
+const LETTERS = ['A','B','C','D'];
+const PASS_SCORE = 48;
+const TOTAL = 60;
+
+const SECTION_BREAKS = {
+  55: { title: 'Role-Specific Section — Q55–60', sub: '' }
+};
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToRegister(selectedTrack) {
+  track = selectedTrack;
+  showScreen('screen-register');
+}
+
+function beginExam() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const errEl = document.getElementById('reg-error');
+  if (!name || !emailValid) {
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  participantName = name;
+  participantEmail = email;
+  startExam(track);
+}
+
+function startExam(selectedTrack) {
+  track = selectedTrack;
+  questions = [...SHARED, ...ROLE_SPECIFIC[track]];
+  currentIdx = 0;
+  userAnswers = new Array(questions.length).fill(null);
+  questionNotes = {};
+  pendingAnswer = null;
+  answerConfirmed = false;
+  examStartTime = Date.now();
+  showFeedbackWidget();
+  SECTION_BREAKS[55].sub = track === 'employee'
+    ? 'Safe Software Employee Track · Q55–60 · HubSpot processes, lead lifecycle, internal tooling, Premium Support'
+    : 'Partner Track · Q55–60 · PRM usage, deal registration, channel process, when to engage Safe Software';
+  showScreen('screen-exam');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentIdx];
+  const total = questions.length;
+  const pct = Math.round((currentIdx / total) * 100);
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `Question ${currentIdx + 1} of ${total}`;
+
+  // Section break
+  const sbContainer = document.getElementById('section-break-container');
+  if (SECTION_BREAKS[q.n]) {
+    sbContainer.innerHTML = `<div class="section-break"><h3>${SECTION_BREAKS[q.n].title}</h3><p>${SECTION_BREAKS[q.n].sub}</p></div>`;
+  } else {
+    sbContainer.innerHTML = '';
+  }
+
+  document.getElementById('q-module').textContent = q.module;
+  document.getElementById('q-number-label').textContent = `Question ${currentIdx + 1}`;
+  document.getElementById('q-text').textContent = q.q;
+
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-letter">${LETTERS[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    container.appendChild(btn);
+  });
+
+  const rationaleBox = document.getElementById('rationale-box');
+  rationaleBox.style.display = 'none';
+  rationaleBox.innerHTML = '';
+
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled = true;
+  nextBtn.textContent = 'Confirm Answer →';
+
+  // Restore confirmed answer state if returning to this question
+  if (userAnswers[currentIdx] !== null) {
+    answerConfirmed = true;
+    applyAnswerState(userAnswers[currentIdx]);
+    nextBtn.textContent = currentIdx < questions.length - 1 ? 'Next →' : 'Finish Exam';
+  } else {
+    answerConfirmed = false;
+    pendingAnswer = null;
+  }
+
+  // Update note dot and close panel
+  closeFeedback();
+  updateNoteDot();
+}
+
+function selectAnswer(selectedIdx) {
+  if (answerConfirmed) return; // already locked in
+
+  pendingAnswer = selectedIdx;
+
+  // Highlight selected option — reversible until confirmed
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((btn, i) => {
+    btn.classList.remove('selected', 'correct', 'wrong');
+    if (i === selectedIdx) btn.classList.add('selected');
+  });
+
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled = false;
+  nextBtn.textContent = 'Confirm Answer →';
+}
+
+function applyAnswerState(selectedIdx) {
+  const q = questions[currentIdx];
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach((btn, i) => {
+    btn.classList.remove('selected');
+    btn.disabled = true;
+    if (i === q.ans) {
+      btn.classList.add('correct');
+    } else if (i === selectedIdx && selectedIdx !== q.ans) {
+      btn.classList.add('wrong');
+    }
+  });
+
+  const rationaleBox = document.getElementById('rationale-box');
+  rationaleBox.innerHTML = `<strong>${selectedIdx === q.ans ? '✓ Correct.' : '✗ Incorrect.'}</strong> ${q.rationale}`;
+  rationaleBox.style.display = 'block';
+}
+
+function nextQuestion() {
+  if (!answerConfirmed) {
+    // First click — confirm the pending answer
+    if (pendingAnswer === null) return;
+    userAnswers[currentIdx] = pendingAnswer;
+    answerConfirmed = true;
+    applyAnswerState(pendingAnswer);
+    const nextBtn = document.getElementById('btn-next');
+    nextBtn.textContent = currentIdx < questions.length - 1 ? 'Next →' : 'Finish Exam';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  // Second click — advance
+  answerConfirmed = false;
+  pendingAnswer = null;
+  if (currentIdx < questions.length - 1) {
+    currentIdx++;
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    showResultsScreen();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════════════════
+function showResultsScreen() {
+  const score = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i].ans ? 1 : 0), 0);
+  const pct = Math.round((score / TOTAL) * 100);
+  const passed = score >= PASS_SCORE;
+
+  document.getElementById('result-badge').className = 'result-badge ' + (passed ? 'pass' : 'fail');
+  document.getElementById('result-badge').textContent = passed ? '✓ Passed' : '✗ Not Passed';
+  document.getElementById('result-score').innerHTML = `${score}<span> / ${TOTAL}</span>`;
+  document.getElementById('result-pct').textContent = `${pct}% — Pass mark is ${PASS_SCORE}/${TOTAL} (80%)`;
+
+  // Module breakdown
+  const modules = {};
+  questions.forEach((q, i) => {
+    const m = q.module;
+    if (!modules[m]) modules[m] = { correct: 0, total: 0 };
+    modules[m].total++;
+    if (userAnswers[i] === q.ans) modules[m].correct++;
+  });
+  const rows = document.getElementById('module-breakdown-rows');
+  rows.innerHTML = Object.entries(modules).map(([name, data]) => {
+    const cls = data.correct === data.total ? 'perfect' : data.correct === 0 ? 'zero' : 'partial';
+    return `<div class="module-row">
+      <span class="module-row-name">${name}</span>
+      <span class="module-row-score ${cls}">${data.correct} / ${data.total}</span>
+    </div>`;
+  }).join('');
+
+  renderNotesList();
+  hideFeedbackWidget();
+  showScreen('screen-results');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  showScreen('screen-results');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════
+// REVIEW
+// ═══════════════════════════════════════════════════════
+function showReview() {
+  const wrongCount = userAnswers.filter((ans, i) => ans !== questions[i].ans).length;
+  document.getElementById('review-subtitle').textContent =
+    wrongCount === 0
+      ? 'Perfect score — all answers correct!'
+      : `${wrongCount} incorrect answer${wrongCount > 1 ? 's' : ''} — review below`;
+
+  const container = document.getElementById('review-items');
+  container.innerHTML = questions.map((q, i) => {
+    const correct = userAnswers[i] === q.ans;
+    const labelClass = correct ? 'correct-label' : 'wrong-label';
+    const itemClass  = correct ? 'correct-item'  : 'wrong-item';
+    const label = correct ? `✓ Q${q.n} — Correct` : `✗ Q${q.n} — Incorrect`;
+
+    const opts = q.opts.map((opt, j) => {
+      let cls = '';
+      if (j === q.ans) cls = 'is-correct';
+      else if (j === userAnswers[i] && userAnswers[i] !== q.ans) cls = 'was-selected-wrong';
+      return `<div class="review-opt ${cls}"><span class="r-letter">${LETTERS[j]}</span><span>${opt}</span></div>`;
+    }).join('');
+
+    return `<div class="review-item ${itemClass}">
+      <div class="review-q-label ${labelClass}">${label}</div>
+      <div class="review-q-text">${q.q}</div>
+      <div class="review-answers">${opts}</div>
+      <div class="review-rationale">${q.rationale}</div>
+    </div>`;
+  }).join('');
+
+  showScreen('screen-review');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function retake() {
+  hideFeedbackWidget();
+  showScreen('screen-landing');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════
+// DATA SUBMISSION
+// ═══════════════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5E1s688yMhCT8mXkbjOLKV64cz-xtGIOfHdhij2g6IPzCP05lyLjpBAN1STVAPMPr/exec';
+let examStartTime = null;
+
+function getModuleKey(mod) {
+  if (mod.startsWith('Module 5 (continued)') || mod.startsWith('Module 5 —  AM') || mod.includes('AM &')) return 'm5b';
+  if (mod.startsWith('Module 1')) return 'm1';
+  if (mod.startsWith('Module 2')) return 'm2';
+  if (mod.startsWith('Module 3')) return 'm3';
+  if (mod.startsWith('Module 4')) return 'm4';
+  if (mod.startsWith('Module 5')) return 'm5';
+  if (mod.startsWith('Module 6')) return 'm6';
+  if (mod.startsWith('Module 7')) return 'm7';
+  if (mod.startsWith('Module 8')) return 'm8';
+  return 'role';
+}
+
+function submitResults() {
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const score = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i].ans ? 1 : 0), 0);
+  const pct = Math.round((score / TOTAL) * 100);
+  const passed = score >= PASS_SCORE;
+  const totalMins = examStartTime ? ((Date.now() - examStartTime) / 60000).toFixed(1) : 'N/A';
+
+  const moduleData = {};
+  questions.forEach((q, i) => {
+    const key = getModuleKey(q.module);
+    if (!moduleData[key]) moduleData[key] = { correct: 0, total: 0 };
+    moduleData[key].total++;
+    if (userAnswers[i] === q.ans) moduleData[key].correct++;
+  });
+  const fmt = k => moduleData[k] ? `${moduleData[k].correct}/${moduleData[k].total}` : '-';
+
+  const wrong = questions
+    .filter((q, i) => userAnswers[i] !== q.ans)
+    .map(q => `Q${q.n}`).join(', ');
+
+  const noteLines = Object.entries(questionNotes)
+    .sort((a,b) => parseInt(a[0])-parseInt(b[0]))
+    .map(([idx, note]) => `Q${questions[parseInt(idx)].n}: ${note}`)
+    .join(' | ');
+
+  const overall = (document.getElementById('final-feedback').value || '').trim();
+
+  const payload = {
+    name: participantName,
+    email: participantEmail,
+    track: track === 'employee' ? 'Safe Software Employee' : 'Partner',
+    score, percentage: pct, passed,
+    totalTimeMinutes: totalMins,
+    m1: fmt('m1'), m2: fmt('m2'), m3: fmt('m3'), m4: fmt('m4'),
+    m5: fmt('m5'), m5b: fmt('m5b'), m6: fmt('m6'), m7: fmt('m7'),
+    m8: fmt('m8'), role: fmt('role'),
+    questionsWrong: wrong,
+    feedbackNotes: noteLines || '(none)',
+    overallFeedback: overall || '(none)'
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    btn.textContent = '✓ Submitted — thank you';
+    btn.style.background = '#14a03a';
+    btn.style.color = '#fff';
+  })
+  .catch(() => {
+    btn.textContent = '⚠ Retry Submit';
+    btn.disabled = false;
+    btn.style.background = '#d63214';
+    btn.style.color = '#fff';
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// FEEDBACK SYSTEM
+// ═══════════════════════════════════════════════════════
+let questionNotes = {};
+let feedbackOpen = false;
+
+function showFeedbackWidget() {
+  document.getElementById('feedback-widget').classList.add('visible');
+}
+function hideFeedbackWidget() {
+  document.getElementById('feedback-widget').classList.remove('visible');
+  closeFeedback();
+}
+function toggleFeedback() {
+  feedbackOpen ? closeFeedback() : openFeedback();
+}
+function openFeedback() {
+  feedbackOpen = true;
+  const q = questions[currentIdx];
+  document.getElementById('feedback-panel-title').textContent = `Q${q.n} — Leave a Note`;
+  document.getElementById('feedback-textarea').value = questionNotes[currentIdx] || '';
+  document.getElementById('feedback-panel').classList.add('open');
+  setTimeout(() => document.getElementById('feedback-textarea').focus(), 50);
+}
+function closeFeedback() {
+  feedbackOpen = false;
+  document.getElementById('feedback-panel').classList.remove('open');
+}
+function saveNote() {
+  const text = document.getElementById('feedback-textarea').value.trim();
+  if (text) {
+    questionNotes[currentIdx] = text;
+  } else {
+    delete questionNotes[currentIdx];
+  }
+  closeFeedback();
+  updateNoteDot();
+}
+function updateNoteDot() {
+  const dot = document.getElementById('note-dot');
+  if (dot) dot.classList.toggle('has-note', !!questionNotes[currentIdx]);
+}
+function renderNotesList() {
+  const container = document.getElementById('notes-list');
+  const entries = Object.entries(questionNotes);
+  if (entries.length === 0) {
+    container.innerHTML = '<p class="no-notes">No notes added during the exam.</p>';
+    return;
+  }
+  container.innerHTML = entries
+    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+    .map(([idx, note]) => {
+      const q = questions[parseInt(idx)];
+      return `<div class="note-item">
+        <div class="note-q">Q${q.n} — ${q.module}</div>
+        <div class="note-text">${note.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      </div>`;
+    }).join('');
+}
+function copyAllFeedback() {
+  const notes = Object.entries(questionNotes)
+    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+    .map(([idx, note]) => {
+      const q = questions[parseInt(idx)];
+      return `Q${q.n} (${q.module}):\n${note}`;
+    }).join('\n\n');
+  const overall = (document.getElementById('final-feedback').value || '').trim();
+  let text = `FME Sales Professional Certification — Exam Feedback\n`;
+  text += `Track: ${track === 'employee' ? 'Safe Software Employee' : 'Partner'}\n`;
+  text += `Date: ${new Date().toLocaleDateString()}\n\n`;
+  if (notes) text += `QUESTION NOTES:\n${notes}\n\n`;
+  if (overall) text += `OVERALL FEEDBACK:\n${overall}`;
+  if (!notes && !overall) text += '(No feedback provided)';
+  const confirm = document.getElementById('copy-confirm');
+  const copy = text => {
+    confirm.style.display = 'inline';
+    setTimeout(() => confirm.style.display = 'none', 2500);
+  };
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(copy).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); copy();
+    });
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); copy();
+  }
+}
+</script>
+</body>
+</html>
