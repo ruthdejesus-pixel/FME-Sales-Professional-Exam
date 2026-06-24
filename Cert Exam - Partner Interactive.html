@@ -503,12 +503,10 @@
     </div>
     <hr class="result-divider">
     <div style="margin-bottom:20px;">
-      <button class="btn-submit" id="btn-submit" onclick="submitResults()">📊 Submit Results</button>
-      <div class="submit-hint">Your score, module breakdown, time taken, and any notes will be recorded anonymously.</div>
+      <div class="submit-hint" id="submit-status">✓ Your results have been submitted.</div>
     </div>
     <div class="result-actions">
       <button class="btn-review" onclick="showReview()">Review Answers</button>
-      <button class="btn-retake" onclick="retake()">← Start Over</button>
     </div>
     <hr class="result-divider">
     <div class="notes-section">
@@ -988,7 +986,7 @@ function renderQuestion() {
   if (userAnswers[currentIdx] !== null) {
     answerConfirmed = true;
     applyAnswerState(userAnswers[currentIdx]);
-    nextBtn.textContent = currentIdx < questions.length - 1 ? 'Next →' : 'Finish Exam';
+    nextBtn.textContent = currentIdx < questions.length - 1 ? 'Next →' : 'Finish & Submit Results';
   } else {
     answerConfirmed = false;
     pendingAnswer = null;
@@ -1043,7 +1041,7 @@ function nextQuestion() {
     answerConfirmed = true;
     applyAnswerState(pendingAnswer);
     const nextBtn = document.getElementById('btn-next');
-    nextBtn.textContent = currentIdx < questions.length - 1 ? 'Next →' : 'Finish Exam';
+    nextBtn.textContent = currentIdx < questions.length - 1 ? 'Next →' : 'Finish & Submit Results';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
@@ -1056,6 +1054,7 @@ function nextQuestion() {
     renderQuestion();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
+    submitResults();
     showResultsScreen();
   }
 }
@@ -1163,9 +1162,8 @@ function getModuleKey(mod) {
 }
 
 function submitResults() {
-  const btn = document.getElementById('btn-submit');
-  btn.disabled = true;
-  btn.textContent = 'Submitting...';
+  const statusEl = document.getElementById('submit-status');
+  if (statusEl) statusEl.textContent = 'Submitting...';
 
   const score = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i].ans ? 1 : 0), 0);
   const pct = Math.round((score / TOTAL) * 100);
@@ -1212,15 +1210,10 @@ function submitResults() {
     body: JSON.stringify(payload)
   })
   .then(() => {
-    btn.textContent = '✓ Submitted — thank you';
-    btn.style.background = '#14a03a';
-    btn.style.color = '#fff';
+    if (statusEl) statusEl.textContent = '✓ Your results have been submitted — thank you!';
   })
   .catch(() => {
-    btn.textContent = '⚠ Retry Submit';
-    btn.disabled = false;
-    btn.style.background = '#d63214';
-    btn.style.color = '#fff';
+    if (statusEl) statusEl.textContent = '⚠ Submission failed — please email your score to your Safe Software contact.';
   });
 }
 
